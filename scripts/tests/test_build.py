@@ -1019,7 +1019,7 @@ class BuildOptionTests(unittest.TestCase):
             "esp32s3",
         )
         self.assertEqual(model, "disabled")
-        self.assertIn("CONFIG_SR_WN_WN9_HIJASON_TTS2=n", options)
+        self.assertIn("CONFIG_SR_WN_WN9_NIHAOXIAOZHI_TTS=n", options)
         self.assertIn("CONFIG_USE_AFE_WAKE_WORD=n", options)
         self.assertIn("CONFIG_USE_ESP_WAKE_WORD=n", options)
         self.assertIn("CONFIG_WAKE_WORD_DISABLED=y", options)
