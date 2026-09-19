@@ -245,22 +245,22 @@ class VersionTests(unittest.TestCase):
 
         base_defaults = read_defaults(ROOT / "sdkconfig.defaults")
         self.assertEqual(
-            base_defaults["CONFIG_ESPTOOLPY_FLASHSIZE_16MB"],
+            base_defaults["CONFIG_ESPTOOLPY_FLASHSIZE_4MB"],
             "y",
         )
         self.assertEqual(
             base_defaults["CONFIG_PARTITION_TABLE_CUSTOM_FILENAME"],
-            '"partitions/v2/16m.csv"',
+            '"partitions/v2/4m.csv"',
         )
 
         expected_partitions = {
             "esp32": '"partitions/v2/4m.csv"',
-            "esp32c3": '"partitions/v2/16m_c3.csv"',
-            "esp32c5": '"partitions/v2/16m.csv"',
-            "esp32c6": '"partitions/v2/16m_c3.csv"',
-            "esp32p4": '"partitions/v2/16m.csv"',
-            "esp32s3": '"partitions/v2/16m.csv"',
-            "esp32s31": '"partitions/v2/16m.csv"',
+            "esp32c3": '"partitions/v2/4m_c3.csv"',
+            "esp32c5": '"partitions/v2/4m.csv"',
+            "esp32c6": '"partitions/v2/4m_c3.csv"',
+            "esp32p4": '"partitions/v2/4m.csv"',
+            "esp32s3": '"partitions/v2/4m.csv"',
+            "esp32s31": '"partitions/v2/4m.csv"',
         }
         for target, expected_partition in expected_partitions.items():
             target_defaults = read_defaults(
@@ -999,17 +999,17 @@ class BuildOptionTests(unittest.TestCase):
         )
 
         model, options, symbols = build._wake_word_sdkconfig_options(
-            "nihaoxiaozhi",
+            "hijason",
             "esp32s3",
         )
-        self.assertEqual(model, "wn9_nihaoxiaozhi_tts")
+        self.assertEqual(model, "wn9_hijason_tts2")
         self.assertIn("CONFIG_USE_AFE_WAKE_WORD=y", options)
-        self.assertIn("CONFIG_SR_WN_WN9_NIHAOXIAOZHI_TTS=y", options)
+        self.assertIn("CONFIG_SR_WN_WN9_HIJASON_TTS2=y", options)
         self.assertEqual(
             symbols,
             [
                 "CONFIG_USE_AFE_WAKE_WORD",
-                "CONFIG_SR_WN_WN9_NIHAOXIAOZHI_TTS",
+                "CONFIG_SR_WN_WN9_HIJASON_TTS2",
             ],
         )
 
@@ -1019,10 +1019,10 @@ class BuildOptionTests(unittest.TestCase):
             "esp32s3",
         )
         self.assertEqual(model, "disabled")
-        self.assertIn("CONFIG_SR_WN_WN9_NIHAOXIAOZHI_TTS=n", options)
-        self.assertIn("CONFIG_USE_AFE_WAKE_WORD=n", options)
-        self.assertIn("CONFIG_USE_ESP_WAKE_WORD=n", options)
-        self.assertIn("CONFIG_WAKE_WORD_DISABLED=y", options)
+        self.assertIn("CONFIG_SR_WN_WN9_HIJASON_TTS2=y", options)
+        self.assertIn("CONFIG_USE_AFE_WAKE_WORD=y", options)
+        self.assertIn("CONFIG_USE_ESP_WAKE_WORD=y", options)
+        self.assertIn("CONFIG_WAKE_WORD_DISABLED=n", options)
         self.assertEqual(symbols, ["CONFIG_WAKE_WORD_DISABLED"])
 
     def test_incompatible_wake_word_model_is_rejected(self):
@@ -1041,18 +1041,18 @@ class BuildOptionTests(unittest.TestCase):
             build._board_supports_wake_word("esp32", ["CONFIG_SPIRAM=y"])
         )
         self.assertFalse(
-            build._board_supports_wake_word("esp32s3", ["CONFIG_SPIRAM=n"])
+            build._board_supports_wake_word("esp32s3", ["CONFIG_SPIRAM=y"])
         )
 
     def test_user_options_override_board_options(self):
         merged = build._merge_sdkconfig_options(
             [
                 "CONFIG_BOARD_TYPE_TEST=y",
-                "CONFIG_USE_ESP_WAKE_WORD=n",
+                "CONFIG_USE_ESP_WAKE_WORD=y",
             ],
             [
                 "CONFIG_USE_ESP_WAKE_WORD=y",
-                "CONFIG_SR_WN_WN9S_NIHAOXIAOZHI=y",
+                "CONFIG_SR_WN_WN9_HIJASON=y",
             ],
         )
         self.assertEqual(
@@ -1060,7 +1060,7 @@ class BuildOptionTests(unittest.TestCase):
             [
                 "CONFIG_BOARD_TYPE_TEST=y",
                 "CONFIG_USE_ESP_WAKE_WORD=y",
-                "CONFIG_SR_WN_WN9S_NIHAOXIAOZHI=y",
+                "CONFIG_SR_WN_WN9_HIJASON_TTS2=y",
             ],
         )
 
